@@ -28,7 +28,7 @@ COPY servers/nextjs/ ./servers/nextjs/
 
 # Build the Next.js app with environment variables
 WORKDIR /app/servers/nextjs
-ARG FASTAPI_URL=http://0.0.0.0:8000
+ARG FASTAPI_URL=http://0.0.0.0:12000
 ENV NEXT_PUBLIC_FAST_API=${FASTAPI_URL}
 RUN npm run build
 
@@ -44,7 +44,7 @@ ENV TEMP_DIRECTORY=/tmp/presenton
 
 
 # Expose the ports for Next.js and FastAPI
-EXPOSE 3000 8000
+EXPOSE 13000 12000
 
 # Start the servers
 CMD ["node", "start.js"]

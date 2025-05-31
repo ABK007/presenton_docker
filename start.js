@@ -8,8 +8,8 @@ const fastapiDir = path.join(__dirname, 'servers/fastapi');
 const nextjsDir = path.join(__dirname, 'servers/nextjs');
 
 const localhost = '0.0.0.0';
-const fastapiPort = 8000;
-const nextjsPort = 3000;
+const fastapiPort = 12000;
+const nextjsPort = 13000;
 
 process.env.USER_CONFIG_PATH = path.join(process.env.APP_DATA_DIRECTORY || "/app", 'userConfig.json');
 process.env.NEXT_PUBLIC_FAST_API = `http://${localhost}:${fastapiPort}`;

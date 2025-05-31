@@ -1,16 +1,32 @@
-services:  
-  presenton:  
-    # image: ghcr.io/presenton/presenton:latest
+version: '3.8'
+services:
+  presenton:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - FASTAPI_URL=${FASTAPI_URL:-http://0.0.0.0:8000}
     environment:
-      - FASTAPI_URL=${FASTAPI_URL:-http://0.0.0.0:8000}
-    ports:  
-      - "3000:3000"
-      - "8000:8000"
-    volumes:  
-      - ./user_data:/app/user_data
-
+      - FASTAPI_URL=${FASTAPI_URL:-http://0.0.0.0:12000}
+    volumes:
+      - user_data:/app/user_data
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.presenton-frontend.rule=Host(`aipr.kognifi.ai`)"
+      - "traefik.http.routers.presenton-frontend.entrypoints=websecure"
+      - "traefik.http.routers.presenton-frontend.service=presenton-frontend-service"
+      - "traefik.http.services.presenton-frontend-service.loadbalancer.server.port=13000"
+      - "traefik.http.routers.presenton-frontend.tls=true"
+      - "traefik.http.routers.presenton-frontend.tls.certresolver=myresolver"
+      - "traefik.http.routers.presenton-backend.rule=Host(`aipr-api.presenton.kognifi.ai`)"
+      - "traefik.http.routers.presenton-backend.entrypoints=websecure"
+      - "traefik.http.routers.presenton-backend.service=presenton-backend-service"
+      - "traefik.http.services.presenton-backend-service.loadbalancer.server.port=12000"
+      - "traefik.http.routers.presenton-backend.tls=true"
+      - "traefik.http.routers.presenton-backend.tls.certresolver=myresolver"
+    networks:
+      - traefik
+volumes:
+  user_data:
+networks:
+  traefik:
+    external: true
